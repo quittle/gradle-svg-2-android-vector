@@ -1,0 +1,32 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        google()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.quittle:svg-2-android-vector:+'
+    }
+}
+
+plugins {
+    id 'com.quittle.setup-android-sdk' version '0.1.0'
+}
+
+repositories {
+    google()
+    jcenter()
+}
+
+apply plugin: 'com.quittle.svg-2-android-vector'
+apply plugin: 'android'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
+}
+
+svg2androidVector {
+    failOnError = false
+}

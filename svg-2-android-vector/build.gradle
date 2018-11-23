@@ -1,0 +1,74 @@
+plugins {
+    id 'findbugs'
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '0.10.0'
+    id 'maven-publish'
+    id 'pmd'
+}
+
+repositories {
+    google()
+    jcenter()
+}
+
+group = 'com.quittle'
+version = '0.0.1'
+
+gradlePlugin {
+    plugins {
+        svg2androidVector {
+            id = 'com.quittle.svg-2-android-vector'
+            implementationClass = 'com.quittle.svg2androidvector.Svg2AndroidVectorPlugin'
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = 'svg-2-android-vector'
+            from components.java
+        }
+    }
+}
+
+pluginBundle {
+    website = 'https://github.com/quittle/svg-2-android-vector'
+    vcsUrl = 'https://github.com/quittle/svg-2-android-vector'
+    description = 'Automatically installs Android SDK dependencies for Android Gradle builds.'
+    tags = ['android', 'android vector', 'svg', 'android resources']
+
+    plugins {
+        svg2androidVector {
+            displayName = 'SVG to Android Vector converter'
+        }
+    }
+}
+
+dependencies {
+//    compile 'com.android.tools:sdk-common:26.2.1'
+    compile 'com.android.tools.build:gradle:2.3.3'
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:all" << "-Werror"
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+javadoc {
+    failOnError true
+    options.addStringOption 'Xwerror', '-quiet' // See https://stackoverflow.com/a/49544352
+}
+
+findbugs {
+    effort 'max'
+    reportLevel 'low'
+}
+
+defaultTasks 'assemble', 'javadoc', 'check'
