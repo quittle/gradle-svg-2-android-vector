@@ -12,7 +12,7 @@ in sync, this plugin allows you to check in just the SVG and produce the Android
 ## Consuming
 
 ### build.gradle (*Coming Soon*)
-```
+```groovy
 plugins {
     id 'com.quittle.svg-2-android-vector' version '0.0.0'
 }
@@ -35,7 +35,7 @@ src
 ```
 
 ## Building
-```
+```sh
 # Build the plugin and run static analysis tools
 ./gradlew -p svg-2-android-vector
 
