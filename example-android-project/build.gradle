@@ -25,8 +25,23 @@ apply plugin: 'android'
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.2'
+
+    sourceSets {
+        main {
+            final String altResDir = System.getenv 'ALTERNATIVE_RES_DIR'
+            if (altResDir != null && altResDir.length() > 0) {
+                res.srcDir altResDir
+            }
+        }
+    }
 }
 
 svg2androidVector {
-    failOnError = false
+    if (Boolean.valueOf(System.getenv('FAIL_ON_WARNING'))) {
+        failOnWarning = true
+        failOnWarning true
+    } else {
+        failOnWarning false
+        failOnWarning = false
+    }
 }

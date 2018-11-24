@@ -1,0 +1,97 @@
+#!/usr/bin/env sh
+
+# Validate that the plugin works correctly.
+
+set -e
+
+VECTOR_RESOURCES_DIR='example-android-project/build/android-vector-resources'
+
+# Hashes a file
+# param 1 - The file to hash
+hash_file() {
+    local file="$1"
+
+    echo $(sha256sum "${file}" | head -c64)
+}
+
+# Asserts that a file does not exist
+# param 1 - The file to check the existence of
+assert_file_does_not_exist() {
+    local file="$1"
+
+    if [ -e "$file" ]; then
+        echo "File $file should not exist"
+        exit 1
+    fi
+}
+
+# Asserts that a file exists
+# param 1 - The file to check the existence of
+assert_file_exists() {
+    local file="$1"
+
+    if [ ! -e "$file" ]; then
+        echo "File $file does not exist"
+        exit 1
+    fi
+}
+
+# Asserts two values are equal. Exits if the values are not
+# param 1 - First value to compare
+# param 2 - Second value to compare
+# param 3 - Error message to print if failed/
+assert_equal() {
+    local failure_message="$3"
+
+    if [ "$1" != "$2" ]; then
+        echo "Values '$1' and '$2' do not match: ${failure_message}"
+        exit 1
+    fi
+}
+
+# Asserts that a file's hash matches the expected value
+# param 1 - The file to hash
+# param 2 - The expected hash of the file
+assert_file_hash() {
+    local file="$1"
+    local expected_hash_value="$2"
+
+    assert_equal "$(hash_file $file)" "${expected_hash_value}" "File hash ${file} incorrect"
+}
+
+# Builds the example android project
+# param 1 - The value for the FAIL_ON_WARNING environment variable
+# param 2 - The value for the ALTERNATIVE_RES_DIR environment variable
+build_with_failure() {
+    local failOnWarning="$1"
+    local alternativeResourcesDir="$2"
+
+    FAIL_ON_WARNING=true ALTERNATIVE_RES_DIR=alternative_res/empty_svg \
+            ./gradlew -p example-android-project assemble && \
+            echo 'Build should not have succeeded' && exit 1 || \
+            echo 'Build failure expected'
+}
+
+# Clean up possibly existing files to ensure a fresh start
+rm -rf 'example-android-project/build'
+assert_file_does_not_exist "$VECTOR_RESOURCES_DIR"
+
+TEST_FILE_HASH='9c583aeeecd5cea9811a5129c7623e10ec162803dbfd08dc371630665fe9edf3'
+ANDROID_FILE_HASH='a898605e4d4c5158e6b801595df406b786877702281bccff19ff55c75545909b'
+
+# Default build
+./gradlew -p example-android-project assemble
+assert_file_exists "$VECTOR_RESOURCES_DIR"
+assert_file_hash "${VECTOR_RESOURCES_DIR}/main/drawable/test.xml" "${TEST_FILE_HASH}"
+assert_file_hash "${VECTOR_RESOURCES_DIR}/androidTest/drawable/android.xml" "${ANDROID_FILE_HASH}"
+
+build_with_failure true ''
+
+build_with_failure false alternative_res/empty_svg
+build_with_failure true alternative_res/empty_svg
+
+build_with_failure false alternative_res/invalid_svg
+build_with_failure true alternative_res/invalid_svg
+
+build_with_failure false alternative_res/not_svg
+build_with_failure true alternative_res/not_svg
