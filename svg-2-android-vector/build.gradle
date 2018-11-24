@@ -33,14 +33,14 @@ publishing {
 }
 
 pluginBundle {
-    website = 'https://github.com/quittle/svg-2-android-vector'
-    vcsUrl = 'https://github.com/quittle/svg-2-android-vector'
-    description = 'Automatically installs Android SDK dependencies for Android Gradle builds.'
+    website = 'https://github.com/quittle/gradle-svg-2-android-vector'
+    vcsUrl = 'https://github.com/quittle/gradle-svg-2-android-vector'
+    description = 'Automatically converts SVGs to Android Vector files as part of the build.'
     tags = ['android', 'android vector', 'svg', 'android resources']
 
     plugins {
         svg2androidVector {
-            displayName = 'SVG to Android Vector converter'
+            displayName = 'Automated SVG to Android Vector converter'
         }
     }
 }
