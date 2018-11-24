@@ -1,7 +1,7 @@
 plugins {
+    id 'com.gradle.plugin-publish' version '0.10.0'
     id 'findbugs'
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.10.0'
     id 'maven-publish'
     id 'pmd'
 }
@@ -46,7 +46,6 @@ pluginBundle {
 }
 
 dependencies {
-//    compile 'com.android.tools:sdk-common:26.2.1'
     compile 'com.android.tools.build:gradle:2.3.3'
 }
 
