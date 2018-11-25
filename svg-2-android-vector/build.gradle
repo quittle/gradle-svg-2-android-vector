@@ -25,12 +25,10 @@ repositories {
 
 group = 'com.quittle'
 version = Git.open(project.rootDir.parentFile)
-        .tagList().call().stream()
-        .map { ref -> ref.name }
-        .filter { ref ->  ref ==~ /refs\/tags\/\d+\.\d+\.\d+/ }
-        .map { ref -> ref.replaceFirst 'refs/tags/', '' }
-        .findFirst()
-        .orElse('0.0.0')
+        .describe()
+        .setTarget("HEAD")
+        .setTags(true)
+        .call()
 
 gradlePlugin {
     plugins {
