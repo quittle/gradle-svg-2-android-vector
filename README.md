@@ -1,4 +1,4 @@
-# SVG 2 Android Vector Plugin
+# SVG 2 Android Vector Plugin [![Build Status](https://travis-ci.org/quittle/gradle-svg-2-android-vector.svg?branch=master)](https://travis-ci.org/quittle/gradle-svg-2-android-vector)
 A simple, Gradle plugin for automatic conversion of SVGs to Android Vector drawables during the build using [Android's official conversion tool](https://android.googlesource.com/platform/tools/base/+/master/sdk-common/src/main/java/com/android/ide/common/vectordrawable/Svg2Vector.java).
 
 Android does not support SVG drawables out of the box because it does not implement the full SVG spec. Instead, it has
