@@ -76,8 +76,8 @@ build_with_failure() {
 rm -rf 'example-android-project/build'
 assert_file_does_not_exist "$VECTOR_RESOURCES_DIR"
 
-TEST_FILE_HASH='9c583aeeecd5cea9811a5129c7623e10ec162803dbfd08dc371630665fe9edf3'
-ANDROID_FILE_HASH='a898605e4d4c5158e6b801595df406b786877702281bccff19ff55c75545909b'
+TEST_FILE_HASH='7c29d5922129a1cb5a267c01b45d5fd4973f3a632bdb0101895b2101964faa10'
+ANDROID_FILE_HASH='25d1c815ef09f97e140257dfaf69651fcc0aa65953438c587b7327e07e10191d'
 
 # Default build
 ./gradlew -p example-android-project assemble
@@ -95,3 +95,5 @@ build_with_failure true alternative_res/invalid_svg
 
 build_with_failure false alternative_res/not_svg
 build_with_failure true alternative_res/not_svg
+
+echo 'Plugin successfully validated!'
