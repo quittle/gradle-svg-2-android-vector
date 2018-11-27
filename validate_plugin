@@ -66,7 +66,7 @@ build_with_failure() {
     local failOnWarning="$1"
     local alternativeResourcesDir="$2"
 
-    FAIL_ON_WARNING=true ALTERNATIVE_RES_DIR=alternative_res/empty_svg \
+    FAIL_ON_WARNING=true ALTERNATIVE_RES_DIR=${alternativeResourcesDir} \
             ./gradlew -p example-android-project assemble && \
             echo 'Build should not have succeeded' && exit 1 || \
             echo 'Build failure expected'
@@ -95,5 +95,7 @@ build_with_failure true alternative_res/invalid_svg
 
 build_with_failure false alternative_res/not_svg
 build_with_failure true alternative_res/not_svg
+
+./gradlew -p example-android-project assemble
 
 echo 'Plugin successfully validated!'
