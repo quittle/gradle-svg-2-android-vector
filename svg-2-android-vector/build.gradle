@@ -62,7 +62,7 @@ pluginBundle {
 }
 
 dependencies {
-    compile 'com.android.tools.build:gradle:2.3.3'
+    compile 'com.android.tools.build:gradle:3.3.2'
 }
 
 tasks.withType(JavaCompile) {
