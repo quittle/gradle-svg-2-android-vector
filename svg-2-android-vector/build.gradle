@@ -11,7 +11,7 @@ buildscript {
 import org.eclipse.jgit.api.Git
 
 plugins {
-    id 'com.gradle.plugin-publish' version '0.10.0'
+    id 'com.gradle.plugin-publish' version '0.10.1'
     id 'findbugs'
     id 'java-gradle-plugin'
     id 'maven-publish'
@@ -26,7 +26,7 @@ repositories {
 group = 'com.quittle'
 version = Git.open(project.rootDir.parentFile)
         .describe()
-        .setTarget("HEAD")
+        .setTarget('HEAD')
         .setTags(true)
         .call()
 
@@ -61,12 +61,13 @@ pluginBundle {
     }
 }
 
-dependencies {
-    compile 'com.android.tools.build:gradle:2.3.3'
+compileJava {
+    options.compilerArgs += ['-Xlint:all', '-Werror', '-proc:none']
 }
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:all" << "-Werror"
+dependencies {
+    implementation gradleApi()
+    implementation 'com.android.tools.build:gradle:3.3.2'
 }
 
 tasks.withType(FindBugs) {

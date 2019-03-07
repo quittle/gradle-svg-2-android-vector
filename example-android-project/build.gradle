@@ -5,13 +5,13 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         classpath 'com.quittle:svg-2-android-vector:+'
     }
 }
 
 plugins {
-    id 'com.quittle.setup-android-sdk' version '0.1.0'
+    id 'com.quittle.setup-android-sdk' version '1.2.0'
 }
 
 repositories {
