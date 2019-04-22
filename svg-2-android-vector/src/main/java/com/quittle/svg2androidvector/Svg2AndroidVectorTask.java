@@ -1,21 +1,24 @@
 package com.quittle.svg2androidvector;
 
-import org.gradle.api.DefaultTask;
-import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.InputFile;
-import org.gradle.api.tasks.OutputFile;
+import com.android.ide.common.vectordrawable.Svg2Vector;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.android.ide.common.vectordrawable.Svg2Vector;
+import org.gradle.api.DefaultTask;
+import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputFile;
+import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskExecutionException;
 
 /**
  * Converts an SVG file to an Android vector drawable.
  */
+@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 public class Svg2AndroidVectorTask extends DefaultTask {
     /**
      * The SVG file to convert from
@@ -38,7 +41,7 @@ public class Svg2AndroidVectorTask extends DefaultTask {
     public Svg2AndroidVectorTask() {
         doLast(task -> {
             try {
-                xml.getParentFile().mkdirs();
+                mkdirs(xml.getParentFile());
                 try (final OutputStream os = new FileOutputStream(xml)) {
                     // parseSvgToXml does not throw on error, it simply returns a log of what it could not convert and
                     // writes nothing out if it completely failed.
@@ -60,9 +63,20 @@ public class Svg2AndroidVectorTask extends DefaultTask {
                     throw new TaskExecutionException(this, new IOException("Unable to write out Android vector file", e));
                 }
             } catch (final TaskExecutionException e) {
-                xml.delete();
+                delete(xml);
                 throw e;
             }
         });
+    }
+
+    private static void mkdirs(final File directory) {
+        if (!directory.mkdirs() && !directory.isDirectory()) {
+            throw new RuntimeException("Unable to make output directory: " + directory.getAbsolutePath());
+        }
+    }
+
+    @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
+    private static void delete(final File file) {
+        file.delete();
     }
 }

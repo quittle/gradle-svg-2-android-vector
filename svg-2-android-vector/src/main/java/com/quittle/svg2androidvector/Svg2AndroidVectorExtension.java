@@ -3,6 +3,7 @@ package com.quittle.svg2androidvector;
 /**
  * Provides configuration for the {@code Svg 2 Android Vector Plugin}.
  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public class Svg2AndroidVectorExtension {
     private boolean failOnWarning = true;
 

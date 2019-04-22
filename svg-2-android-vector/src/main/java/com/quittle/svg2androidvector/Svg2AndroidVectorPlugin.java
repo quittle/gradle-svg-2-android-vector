@@ -15,6 +15,7 @@ import java.nio.file.Paths;
  * Entry point for the project. This plugin will replace {@code res/raw/*.svg} files with {@code res/drawable/*.xml}
  * files in the Android Vector format. This allows you check-in the SVG sources for Android vector drawables.
  */
+@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 public class Svg2AndroidVectorPlugin implements Plugin<Project> {
     /**
      * The string used for the extension visible in consumers' {@code build.gradle}.
