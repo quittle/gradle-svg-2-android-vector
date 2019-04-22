@@ -11,8 +11,8 @@ buildscript {
 import org.eclipse.jgit.api.Git
 
 plugins {
+    id 'com.github.spotbugs' version '1.7.1'
     id 'com.gradle.plugin-publish' version '0.10.1'
-    id 'findbugs'
     id 'java-gradle-plugin'
     id 'maven-publish'
     id 'pmd'
@@ -62,7 +62,7 @@ pluginBundle {
 }
 
 compileJava {
-    options.compilerArgs += ['-Xlint:all', '-Werror', '-proc:none']
+    options.compilerArgs << '-Xlint:all' << '-Werror' << '-proc:none'
 }
 
 dependencies {
@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.android.tools.build:gradle:3.3.2'
 }
 
-tasks.withType(FindBugs) {
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
     reports {
         xml.enabled = false
         html.enabled = true
@@ -82,7 +82,7 @@ javadoc {
     options.addStringOption 'Xwerror', '-quiet' // See https://stackoverflow.com/a/49544352
 }
 
-findbugs {
+spotbugs {
     effort 'max'
     reportLevel 'low'
 }
