@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.eclipse.jgit:org.eclipse.jgit:5.4.0.201906121030-r'
+        classpath 'org.eclipse.jgit:org.eclipse.jgit:5.4.3.201909031940-r'
     }
 }
 
@@ -70,7 +70,7 @@ dependencies {
     compileOnly 'com.google.code.findbugs:annotations:3.0.1'
 
     implementation gradleApi()
-    implementation 'com.android.tools.build:gradle:3.4.2'
+    implementation 'com.android.tools.build:gradle:3.5.0'
 }
 
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
