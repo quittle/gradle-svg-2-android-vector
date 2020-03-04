@@ -15,6 +15,7 @@ import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskExecutionException;
+import org.xml.sax.SAXException;
 
 /**
  * Converts an SVG file to an Android vector drawable.
@@ -56,7 +57,12 @@ public class Svg2AndroidVectorTask extends DefaultTask {
             try (final OutputStream os = new FileOutputStream(xml)) {
                 // parseSvgToXml does not throw on error, it simply returns a log of what it could not convert and
                 // writes nothing out if it completely failed.
-                final String errorLog = Svg2Vector.parseSvgToXml(svg, os);
+                final String errorLog;
+                try {
+                    errorLog = Svg2Vector.parseSvgToXml(svg, os); // NOPMD - DataflowAnomalyAnalysis:DU
+                } catch (final SAXException e) {
+                    throw new TaskExecutionException(this, new SAXException("Unable to parse SVG file", e));
+                }
 
                 // Handle complete error where the SVG could not be converted at all.
                 os.flush();
