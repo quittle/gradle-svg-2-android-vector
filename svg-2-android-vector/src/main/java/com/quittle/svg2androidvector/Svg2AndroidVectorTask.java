@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 @SuppressWarnings("PMD.BeanMembersShouldSerialize")
 public class Svg2AndroidVectorTask extends DefaultTask {
     /**
-     * The SVG file to convert from
+     * @return The SVG file to convert from
      */
     @InputFile
     public File getSvg() {
@@ -31,7 +31,7 @@ public class Svg2AndroidVectorTask extends DefaultTask {
     }
 
     /**
-     * The Android vector xml file to convert to.
+     * @return The Android vector xml file to convert to.
      */
     @OutputFile
     public File getXml() {
@@ -39,7 +39,7 @@ public class Svg2AndroidVectorTask extends DefaultTask {
     }
 
     /**
-     * Whether or not to fail the task if only part of the SVG could be converted.
+     * @return Whether or not to fail the task if only part of the SVG could be converted.
      */
     @Input
     public boolean getFailOnWarning() {
