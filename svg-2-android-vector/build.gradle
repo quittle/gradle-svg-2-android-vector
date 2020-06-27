@@ -70,7 +70,7 @@ dependencies {
     compileOnly 'com.google.code.findbugs:annotations:3.0.1'
 
     implementation gradleApi()
-    implementation 'com.android.tools.build:gradle:3.6.3'
+    implementation 'com.android.tools.build:gradle:4.0.0'
 }
 
 tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
