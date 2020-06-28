@@ -60,7 +60,7 @@ public class Svg2AndroidVectorTask extends DefaultTask {
                 final String errorLog;
                 try {
                     errorLog = Svg2Vector.parseSvgToXml(svg, os); // NOPMD - DataflowAnomalyAnalysis:DU
-                } catch (final Throwable e) {
+                } catch (final Exception e) {
                     throw new TaskExecutionException(this, new Exception("Unable to parse SVG file", e));
                 }
 
