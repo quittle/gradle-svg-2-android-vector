@@ -70,11 +70,11 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                     .forEach(svgFile -> {
                         // Create a task to build the Android vector equivalent file in an Android resource
                         // directory specifically for this source set
-                        final File newResouceDir = new File(generatedResourceDir, sourceSetName);
+                        final File newResourceDir = new File(generatedResourceDir, sourceSetName);
                         taskContainer.create(buildTaskName(svgFile), Svg2AndroidVectorTask.class, task -> {
                             task.svg = svgFile;
                             task.xml = Paths.get(
-                                    newResouceDir.getAbsolutePath(),
+                                    newResourceDir.getAbsolutePath(),
                                     ANDROID_RESOURCES_DIR_NAME_DRAWABLE,
                                     svgFile.getName().replace(SVG_FILE_EXTENSION, XML_FILE_EXTENSION)).toFile();
                             task.failOnWarning = extension.getFailOnWarning();
@@ -82,7 +82,7 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                         });
 
                         // Add the new, generated resource directory for the source set
-                        sourceDirectorySet.srcDir(newResouceDir);
+                        sourceDirectorySet.srcDir(newResourceDir);
                         // Remove the original resource from the resources. Two resources with the same name but
                         // different types may not share the same name.
                         sourceDirectorySet.getFilter().exclude(svgFile.getAbsolutePath());
