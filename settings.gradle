@@ -1,0 +1,6 @@
+include ":example-android-project"
+includeBuild("svg-2-android-vector") {
+    dependencySubstitution {
+        substitute module('com.quittle:svg-2-android-vector') with project(':')
+    }
+}
