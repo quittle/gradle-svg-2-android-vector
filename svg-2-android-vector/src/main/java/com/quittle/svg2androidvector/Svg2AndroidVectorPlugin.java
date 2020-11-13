@@ -1,9 +1,13 @@
 package com.quittle.svg2androidvector;
 
+import com.android.build.gradle.AppExtension;
 import com.android.build.gradle.BaseExtension;
+import com.android.build.gradle.LibraryExtension;
 import com.android.build.gradle.api.AndroidSourceDirectorySet;
 import com.android.build.gradle.api.AndroidSourceSet;
+import com.android.build.gradle.api.BaseVariant;
 
+import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -33,7 +37,6 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
     private static final String SVG_FILE_EXTENSION = ".svg";
     private static final String XML_FILE_EXTENSION = ".xml";
     private static final String BUILD_DIR_RESOURCE_NAME = "android-vector-resources";
-    private static final String EARLY_ANDROID_TASK_NAME = "preBuild";
     // TODO: See if the drawable folder may be used instead of raw.
     private static final String SVG_FILTER_PATTERN =
             String.format("%s/**/*%s", ANDROID_RESOURCES_DIR_NAME_RAW, SVG_FILE_EXTENSION);
@@ -66,8 +69,30 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                 project.getDisplayName());
         final TaskContainer taskContainer = project.getTasks();
         final Task parentTask = taskContainer.create(CONVERSION_PARENT_TASK_NAME);
-        // An early Android task all the conversion tasks should be a dependency of
-        taskContainer.findByName(EARLY_ANDROID_TASK_NAME).dependsOn(parentTask);
+
+        // "preBuild" is an early Android task all the conversion tasks should be a dependency of
+        final AppExtension androidApp = project.getExtensions().findByType(AppExtension.class);
+        final LibraryExtension androidLib = project.getExtensions().findByType(LibraryExtension.class);
+
+        // Creating this ahead of time to avoid code repetition.
+        final Action<BaseVariant> dependencyAdder = baseVariant -> {
+            baseVariant.getPreBuildProvider().configure((Task task) -> {
+                task.dependsOn(parentTask);
+            });
+        };
+
+        if (androidApp != null) {
+            androidApp.getApplicationVariants().all(dependencyAdder);
+            androidApp.getTestVariants().all(dependencyAdder);
+            androidApp.getUnitTestVariants().all(dependencyAdder);
+        } else if (androidLib != null) {
+            androidLib.getLibraryVariants().all(dependencyAdder);
+            androidLib.getTestVariants().all(dependencyAdder);
+            androidLib.getUnitTestVariants().all(dependencyAdder);
+        } else {
+            project.getLogger().warn("This project {} is an Android project, but neither a library nor an app. Cannot apply dependency!",
+                    project.getDisplayName());
+        }
         // The folder to put the converted files
         final File generatedResourceDir = new File(project.getBuildDir(), BUILD_DIR_RESOURCE_NAME);
         for (final AndroidSourceSet sourceSet : androidExtension.getSourceSets()) {
