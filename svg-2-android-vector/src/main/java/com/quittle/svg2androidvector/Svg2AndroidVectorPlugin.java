@@ -3,6 +3,7 @@ package com.quittle.svg2androidvector;
 import com.android.build.gradle.BaseExtension;
 import com.android.build.gradle.api.AndroidSourceDirectorySet;
 import com.android.build.gradle.api.AndroidSourceSet;
+
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -53,14 +54,22 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
     }
 
     private static void onAfterEvaluate(final Project project, final Svg2AndroidVectorExtension extension) {
+        // The base Android extension, where all resources can be found.
+        final BaseExtension androidExtension = project.getExtensions().findByType(BaseExtension.class);
+        if (androidExtension == null) {
+            // This might mean it was applied to a non-Android project, possibly just the root project.
+            project.getLogger().info("{} had the Svg2AndroidVector plugin applied, but it's not an Android project (maybe the root project?) so we'll not do anything.",
+                    project.getDisplayName());
+            return;
+        }
+        project.getLogger().info("Applying Svg2AndroidVector plugin to {}.",
+                project.getDisplayName());
         final TaskContainer taskContainer = project.getTasks();
         final Task parentTask = taskContainer.create(CONVERSION_PARENT_TASK_NAME);
         // An early Android task all the conversion tasks should be a dependency of
         taskContainer.findByName(EARLY_ANDROID_TASK_NAME).dependsOn(parentTask);
         // The folder to put the converted files
         final File generatedResourceDir = new File(project.getBuildDir(), BUILD_DIR_RESOURCE_NAME);
-        // The base Android extension, where all resources can be found.
-        final BaseExtension androidExtension = project.getExtensions().getByType(BaseExtension.class);
         for (final AndroidSourceSet sourceSet : androidExtension.getSourceSets()) {
             final String sourceSetName = sourceSet.getName(); // e.g. main, androidTest, debug, etc.
             final AndroidSourceDirectorySet sourceDirectorySet = sourceSet.getRes();
