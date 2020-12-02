@@ -1,4 +1,4 @@
-# SVG 2 Android Vector Plugin [![Gradle Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/quittle/svg-2-android-vector/maven-metadata.xml.svg?label=Gradle+Plugin)](https://plugins.gradle.org/plugin/com.quittle.svg-2-android-vector) [![Build Status](https://travis-ci.com/quittle/gradle-svg-2-android-vector.svg?branch=master)](https://travis-ci.com/quittle/gradle-svg-2-android-vector)
+# SVG 2 Android Vector Plugin [![Gradle Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/quittle/svg-2-android-vector/maven-metadata.xml.svg?label=Gradle+Plugin)](https://plugins.gradle.org/plugin/com.quittle.svg-2-android-vector) [![Build Status](https://github.com/quittle/gradle-svg-2-android-vector/workflows/SVG%202%20Android%20Gradle%20Plugin/badge.svg?branch=main)](https://github.com/quittle/gradle-svg-2-android-vector/actions?query=workflow%3A%22SVG+2+Android+Gradle+Plugin%22+branch%3Amain)
 A simple, Gradle plugin for automatic conversion of SVGs to Android Vector drawables during the build using [Android's official conversion tool](https://android.googlesource.com/platform/tools/base/+/master/sdk-common/src/main/java/com/android/ide/common/vectordrawable/Svg2Vector.java).
 
 Android does not support SVG drawables out of the box because it does not implement the full SVG spec. Instead, it has
@@ -47,9 +47,11 @@ src
 ```
 
 ## Publishing
-This package is deployed via [Travis CI](https://travis-ci.com/quittle/gradle-svg-2-android-vector).
-See `.travis.yml` for the CI/CD setup.
+This package is deployed via [GitHub Actions on the `main` branch](https://github.com/quittle/gradle-svg-2-android-vector/actions?query=workflow%3A%22SVG+2+Android+Gradle+Plugin%22+branch%3Amain).
+See `.github/workflows/gradle.yml` for the CI/CD setup.
 
-Only Travis can decrypt `GRADLE_PUBLISH_KEY` and `GRADLE_PUBLISH_SECRET` and enject them as environment variables.
+This repository has `GRADLE_PUBLISH_KEY` and `GRADLE_PUBLISH_SECRET` secrets set up from
+https://plugins.gradle.org injected into the build.
 
-Upon check-in to the `master` branch, Travis checks out, builds, and deploys the plugin.
+Upon check-in to the `main` branch, GitHub Actions checks out, builds, and deploys the plugin.
+Version numbers are determined by tag names.
