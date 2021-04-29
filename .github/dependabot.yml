@@ -1,0 +1,37 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/svg-2-android-vector"
+  schedule:
+    interval: monthly
+    time: "18:00"
+    timezone: Europe/London
+  open-pull-requests-limit: 99
+  reviewers:
+  - quittle
+  assignees:
+  - quittle
+  labels:
+  - dependencies
+  ignore:
+  - dependency-name: com.google.code.findbugs:annotations
+    versions:
+    - ">= 3.0.1u2.a, < 3.0.2"
+  - dependency-name: com.android.tools.build:gradle
+    versions:
+    - 4.1.1
+    - 4.1.2
+- package-ecosystem: gradle
+  directory: "/example-android-project"
+  schedule:
+    interval: weekly
+    day: friday
+    time: "18:00"
+    timezone: Europe/London
+  open-pull-requests-limit: 99
+  reviewers:
+  - quittle
+  assignees:
+  - quittle
+  labels:
+  - dependencies
