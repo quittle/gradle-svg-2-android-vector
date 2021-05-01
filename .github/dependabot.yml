@@ -1,0 +1,29 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/svg-2-android-vector"
+  schedule:
+    interval: monthly
+    time: "18:00"
+    timezone: America/New_York
+  open-pull-requests-limit: 99
+  reviewers:
+  - quittle
+  assignees:
+  - quittle
+  labels:
+  - dependencies
+- package-ecosystem: gradle
+  directory: "/example-android-project"
+  schedule:
+    interval: weekly
+    day: friday
+    time: "18:00"
+    timezone: America/New_York
+  open-pull-requests-limit: 99
+  reviewers:
+  - quittle
+  assignees:
+  - quittle
+  labels:
+  - dependencies
