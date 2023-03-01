@@ -66,8 +66,8 @@ compileJava {
 }
 
 dependencies {
-    annotationProcessor 'com.google.code.findbugs:annotations:3.0.1u2'
-    compileOnly 'com.google.code.findbugs:annotations:3.0.1'
+    annotationProcessor 'com.google.code.findbugs:annotations:3.0.1u2u2'
+    compileOnly 'com.google.code.findbugs:annotations:3.0.1u2'
 
     implementation gradleApi()
     implementation 'com.android.tools.build:gradle:4.0.2'
