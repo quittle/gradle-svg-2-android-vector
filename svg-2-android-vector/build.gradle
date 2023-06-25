@@ -4,15 +4,15 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.eclipse.jgit:org.eclipse.jgit:5.11.1.202105131744-r'
+        classpath 'org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r'
     }
 }
 
 import org.eclipse.jgit.api.Git
 
 plugins {
-    id 'com.github.spotbugs' version '4.7.1'
-    id 'com.gradle.plugin-publish' version '0.19.0'
+    id 'com.github.spotbugs' version '5.0.14'
+    id 'com.gradle.plugin-publish' version '1.2.0'
     id 'java-gradle-plugin'
     id 'maven-publish'
     id 'pmd'
@@ -20,7 +20,7 @@ plugins {
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 }
 
 group = 'com.quittle'
@@ -31,10 +31,16 @@ version = Git.open(project.rootDir.parentFile)
         .call()
 
 gradlePlugin {
+    website = 'https://github.com/quittle/gradle-svg-2-android-vector'
+    vcsUrl = 'https://github.com/quittle/gradle-svg-2-android-vector'
+    description = 'Automatically converts SVGs to Android Vector files as part of the build.'
+
     plugins {
         svg2androidVector {
+            displayName = 'Automated SVG to Android Vector converter'
             id = 'com.quittle.svg-2-android-vector'
             implementationClass = 'com.quittle.svg2androidvector.Svg2AndroidVectorPlugin'
+            tags.set(['android', 'android vector', 'svg', 'android resources'])
         }
     }
 }
@@ -48,29 +54,17 @@ publishing {
     }
 }
 
-pluginBundle {
-    website = 'https://github.com/quittle/gradle-svg-2-android-vector'
-    vcsUrl = 'https://github.com/quittle/gradle-svg-2-android-vector'
-    description = 'Automatically converts SVGs to Android Vector files as part of the build.'
-    tags = ['android', 'android vector', 'svg', 'android resources']
-
-    plugins {
-        svg2androidVector {
-            displayName = 'Automated SVG to Android Vector converter'
-        }
-    }
-}
-
 compileJava {
     options.compilerArgs << '-Xlint:all' << '-Werror' << '-proc:none'
 }
 
 dependencies {
-    annotationProcessor 'com.google.code.findbugs:annotations:3.0.1u2'
-    compileOnly 'com.google.code.findbugs:annotations:3.0.1'
+    annotationProcessor group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.7.3'
+    compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.7.3'
 
     implementation gradleApi()
-    implementation 'com.android.tools.build:gradle:4.0.2'
+    implementation 'com.android.tools.build:gradle:8.0.0' // TODO: remove?
+    implementation 'com.android.tools:sdk-common:31.0.2'
 }
 
 tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {

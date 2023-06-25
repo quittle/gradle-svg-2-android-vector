@@ -15,7 +15,6 @@ import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskExecutionException;
-import org.xml.sax.SAXException;
 
 /**
  * Converts an SVG file to an Android vector drawable.
@@ -39,7 +38,8 @@ public class Svg2AndroidVectorTask extends DefaultTask {
     }
 
     /**
-     * @return Whether or not to fail the task if only part of the SVG could be converted.
+     * @return Whether or not to fail the task if only part of the SVG could be
+     *         converted.
      */
     @Input
     public boolean getFailOnWarning() {
@@ -50,16 +50,20 @@ public class Svg2AndroidVectorTask extends DefaultTask {
     File xml;
     boolean failOnWarning = true;
 
+    /**
+     * Convert SVGs
+     */
     @TaskAction
     public void action() {
         try {
             mkdirs(xml.getParentFile());
             try (final OutputStream os = new FileOutputStream(xml)) {
-                // parseSvgToXml does not throw on error, it simply returns a log of what it could not convert and
+                // parseSvgToXml does not throw on error, it simply returns a log of what it
+                // could not convert and
                 // writes nothing out if it completely failed.
                 final String errorLog;
                 try {
-                    errorLog = Svg2Vector.parseSvgToXml(svg, os); // NOPMD - DataflowAnomalyAnalysis:DU
+                    errorLog = Svg2Vector.parseSvgToXml(svg.toPath(), os); // NOPMD - DataflowAnomalyAnalysis:DU
                 } catch (final Exception e) {
                     throw new TaskExecutionException(this, new Exception("Unable to parse SVG file", e));
                 }
@@ -72,7 +76,8 @@ public class Svg2AndroidVectorTask extends DefaultTask {
                                     svg.getAbsolutePath() + " unable to be converted to Android vector: " + errorLog));
                 }
 
-                // Handle partial error where not everything could be converted but a drawable was able to be created.
+                // Handle partial error where not everything could be converted but a drawable
+                // was able to be created.
                 if (failOnWarning && errorLog.length() != 0) {
                     throw new TaskExecutionException(this, new RuntimeException(errorLog));
                 }
