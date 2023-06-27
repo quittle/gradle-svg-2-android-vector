@@ -33,16 +33,16 @@ version = Git.open(project.rootDir.parentFile)
 final String PLUGIN_ID = System.getenv('TEST_PLUGIN_ID_OVERRIDE') ?: 'svg-2-android-vector'
 
 gradlePlugin {
-    website = 'https://github.com/quittle/gradle-svg-2-android-vector'
-    vcsUrl = 'https://github.com/quittle/gradle-svg-2-android-vector'
-    description = 'Automatically converts SVGs to Android Vector files as part of the build.'
-
     plugins {
         svg2androidVector {
-            displayName = 'Automated SVG to Android Vector converter'
             id = 'com.quittle.svg-2-android-vector'
             implementationClass = 'com.quittle.svg2androidvector.Svg2AndroidVectorPlugin'
+
+            displayName = 'Automated SVG to Android Vector converter'
+            description = 'Automatically converts SVGs to Android Vector files as part of the build.'
             tags.set(['android', 'android vector', 'svg', 'android resources'])
+            website = 'https://github.com/quittle/gradle-svg-2-android-vector'
+            vcsUrl = 'https://github.com/quittle/gradle-svg-2-android-vector'
         }
     }
 }
