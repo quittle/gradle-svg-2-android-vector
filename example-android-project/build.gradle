@@ -4,9 +4,11 @@ buildscript {
         google()
     }
 
+    final String pluginId = System.getenv('TEST_PLUGIN_ID_OVERRIDE') ?: 'svg-2-android-vector'
+
     dependencies {
         classpath 'com.android.tools.build:gradle:8.0.0'
-        classpath 'com.quittle:svg-2-android-vector:+'
+        classpath "com.quittle:${pluginId}:+"
     }
 }
 

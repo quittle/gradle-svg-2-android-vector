@@ -30,6 +30,8 @@ version = Git.open(project.rootDir.parentFile)
         .setTags(true)
         .call()
 
+final String PLUGIN_ID = System.getenv('TEST_PLUGIN_ID_OVERRIDE') ?: 'svg-2-android-vector'
+
 gradlePlugin {
     website = 'https://github.com/quittle/gradle-svg-2-android-vector'
     vcsUrl = 'https://github.com/quittle/gradle-svg-2-android-vector'
@@ -48,7 +50,7 @@ gradlePlugin {
 publishing {
     publications {
         pluginMaven(MavenPublication) {
-            artifactId = 'svg-2-android-vector'
+            artifactId = PLUGIN_ID
         }
     }
 }

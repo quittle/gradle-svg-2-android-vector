@@ -40,10 +40,10 @@ src
 ./gradlew -p svg-2-android-vector
 
 # Publish it the local maven
-./gradlew -p svg-2-android-vector publishToMavenLocal
+TEST_PLUGIN_ID_OVERRIDE=plugin-id-override ./gradlew -p svg-2-android-vector publishToMavenLocal
 
 # Apply the plugin locally in a test project that validates it runs.
-./gradlew -p example-android-project assemble
+TEST_PLUGIN_ID_OVERRIDE=plugin-id-override ./gradlew -p example-android-project assemble
 ```
 
 ## Publishing
