@@ -47,9 +47,8 @@ gradlePlugin {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        pluginMaven(MavenPublication) {
             artifactId = 'svg-2-android-vector'
-            from components.java
         }
     }
 }
