@@ -29,6 +29,15 @@ jobs:
         ./gradlew -p svg-2-android-vector publishToMavenLocal # Publish locally to consume in example-android-project
         ./validate_plugin
 
+  automerge:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v3.9.0 
+        with:
+          github-token: ${{secrets.DEPENDABOT_PAT}}
+
   deploy:
     if: ${{ contains(github.ref, 'refs/tags/') }}
 
