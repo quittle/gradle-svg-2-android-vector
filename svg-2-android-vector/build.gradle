@@ -11,7 +11,7 @@ buildscript {
 import org.eclipse.jgit.api.Git
 
 plugins {
-    id 'com.github.spotbugs' version '5.0.14'
+    id 'com.github.spotbugs' version '5.1.3'
     id 'com.gradle.plugin-publish' version '1.2.0'
     id 'java-gradle-plugin'
     id 'maven-publish'
