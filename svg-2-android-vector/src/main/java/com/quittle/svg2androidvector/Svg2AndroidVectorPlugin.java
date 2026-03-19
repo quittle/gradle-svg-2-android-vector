@@ -43,7 +43,7 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
     // TODO: See if the drawable folder may be used instead of raw.
     private static final String SVG_FILTER_PATTERN = String.format("%s/**/*%s", ANDROID_RESOURCES_DIR_NAME_RAW,
             SVG_FILE_EXTENSION);
-    private static final String CONVERSION_TASK_NAME_FORMAT = "ConvertSvgToXml-%s";
+    private static final String CONVERSION_TASK_NAME_FORMAT = "ConvertSvgToXml-%s-%s";
 
     /**
      * Default constructor.
@@ -99,16 +99,23 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                         // resource
                         // directory specifically for this source set
                         final File newResourceDir = new File(generatedResourceDir, sourceSetName);
-                        taskContainer.create(buildTaskName(svgFile), Svg2AndroidVectorTask.class, task -> {
-                            task.svg = svgFile;
-                            task.xml = Paths.get(
-                                    newResourceDir.getAbsolutePath(),
-                                    ANDROID_RESOURCES_DIR_NAME_DRAWABLE,
-                                    svgFile.getName().replace(SVG_FILE_EXTENSION, XML_FILE_EXTENSION)).toFile();
-                            task.failOnWarning = extension.getFailOnWarning();
-                            parentTask.dependsOn(task);
-                        });
 
+                        logger.info("svgFile = " + svgFile.getAbsolutePath());
+                        logger.info("sourceSetName = " + sourceSetName);
+                        logger.info("newResourceDir = " + newResourceDir.getAbsolutePath());
+
+                        taskContainer.create(buildTaskName(sourceSetName, svgFile),
+                            Svg2AndroidVectorTask.class, task -> {
+                                task.svg = svgFile;
+                                task.xml = Paths.get(
+                                        newResourceDir.getAbsolutePath(),
+                                        ANDROID_RESOURCES_DIR_NAME_DRAWABLE,
+                                        svgFile.getName().replace(SVG_FILE_EXTENSION, XML_FILE_EXTENSION)).toFile();
+                                task.failOnWarning = extension.getFailOnWarning();
+                                parentTask.dependsOn(task);
+                            }
+                        );
+                        
                         // Add the new, generated resource directory for the source set
                         sourceDirectorySet.srcDir(newResourceDir);
                         // Remove the original resource from the resources. Two resources with the same
@@ -119,8 +126,8 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
         }
     }
 
-    private static String buildTaskName(final File svgFile) {
-        return String.format(CONVERSION_TASK_NAME_FORMAT, svgFile.getName());
+    private static String buildTaskName(final String sourceSetName, final File svgFile) {
+        return String.format(CONVERSION_TASK_NAME_FORMAT, sourceSetName, svgFile.getName());
     }
 
     @SuppressWarnings("deprecation")
