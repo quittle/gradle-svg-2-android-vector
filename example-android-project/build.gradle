@@ -36,6 +36,23 @@ android {
             }
         }
     }
+    flavorDimensions "type" "buildType"
+    productFlavors {
+        prod {
+            dimension "type"
+            applicationIdSuffix '.prod'
+        }
+        internal {
+            dimension "type"
+            applicationIdSuffix '.internal'
+        }
+        normal {
+            dimension "buildType"
+        }
+        special {
+            dimension "buildType"
+        }
+    }
 }
 
 svg2androidVector {
