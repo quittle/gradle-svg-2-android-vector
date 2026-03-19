@@ -88,7 +88,7 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
             preBuildTask.dependsOn(parentTask);
         }
         // The folder to put the converted files
-        final File generatedResourceDir = new File(project.getBuildDir(), BUILD_DIR_RESOURCE_NAME);
+        final File generatedResourceDir = new File(project.getLayout().getBuildDirectory().getAsFile().get(), BUILD_DIR_RESOURCE_NAME);
         for (final AndroidSourceSet sourceSet : androidExtension.getSourceSets()) {
             final String sourceSetName = sourceSet.getName(); // e.g. main, androidTest, debug, etc.
             final AndroidSourceDirectorySet sourceDirectorySet = sourceSet.getRes();
