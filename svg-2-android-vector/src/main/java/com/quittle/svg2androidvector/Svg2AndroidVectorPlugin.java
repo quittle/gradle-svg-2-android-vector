@@ -45,6 +45,12 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
             SVG_FILE_EXTENSION);
     private static final String CONVERSION_TASK_NAME_FORMAT = "ConvertSvgToXml-%s";
 
+    /**
+     * Default constructor.
+     */
+    public Svg2AndroidVectorPlugin() {
+    }
+
     @Override
     public void apply(final Project project) {
         final Svg2AndroidVectorExtension extension = new Svg2AndroidVectorExtension();
