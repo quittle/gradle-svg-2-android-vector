@@ -22,6 +22,14 @@ import org.gradle.api.tasks.TaskExecutionException;
 @SuppressWarnings("PMD.BeanMembersShouldSerialize")
 public class Svg2AndroidVectorTask extends DefaultTask {
     /**
+     * Default constructor.
+     */
+    public Svg2AndroidVectorTask() {
+        super();
+    }
+
+    /**
+     * The SVG file to convert from
      * @return The SVG file to convert from
      */
     @InputFile
@@ -30,6 +38,7 @@ public class Svg2AndroidVectorTask extends DefaultTask {
     }
 
     /**
+     * The Android vector xml file to convert to.
      * @return The Android vector xml file to convert to.
      */
     @OutputFile
@@ -38,6 +47,8 @@ public class Svg2AndroidVectorTask extends DefaultTask {
     }
 
     /**
+     * Whether or not to fail the task if only part of the SVG could be
+     *         converted.
      * @return Whether or not to fail the task if only part of the SVG could be
      *         converted.
      */
