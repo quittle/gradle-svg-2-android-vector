@@ -45,6 +45,23 @@ android {
             }
         }
     }
+    flavorDimensions "type", "style"
+    productFlavors {
+        prod {
+            dimension "type"
+            applicationIdSuffix '.prod'
+        }
+        internal {
+            dimension "type"
+            applicationIdSuffix '.internal'
+        }
+        normal {
+            dimension "style"
+        }
+        special {
+            dimension "style"
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

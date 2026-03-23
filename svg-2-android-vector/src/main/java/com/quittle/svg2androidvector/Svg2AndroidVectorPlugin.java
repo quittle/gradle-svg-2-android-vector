@@ -44,7 +44,7 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
     // TODO: See if the drawable folder may be used instead of raw.
     private static final String SVG_FILTER_PATTERN = String.format("%s/**/*%s", ANDROID_RESOURCES_DIR_NAME_RAW,
             SVG_FILE_EXTENSION);
-    private static final String CONVERSION_TASK_NAME_FORMAT = "ConvertSvgToXml-%s";
+    private static final String CONVERSION_TASK_NAME_FORMAT = "ConvertSvgToXml-%s-%s";
 
     /**
      * Default constructor.
@@ -102,7 +102,7 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                         // directory specifically for this source set
                         final File newResourceDir = new File(generatedResourceDir, sourceSetName);
 
-                        final TaskProvider<Svg2AndroidVectorTask> taskProvider = taskContainer.register(buildTaskName(svgFile),
+                        final TaskProvider<Svg2AndroidVectorTask> taskProvider = taskContainer.register(buildTaskName(sourceSetName, svgFile),
                             Svg2AndroidVectorTask.class, task -> {
                                 task.svg = svgFile;
                                 task.xml = Paths.get(
@@ -126,8 +126,8 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
         }
     }
 
-    private static String buildTaskName(final File svgFile) {
-        return String.format(CONVERSION_TASK_NAME_FORMAT, svgFile.getName());
+    private static String buildTaskName(final String sourceSetName, final File svgFile) {
+        return String.format(CONVERSION_TASK_NAME_FORMAT, sourceSetName, svgFile.getName());
     }
 
     @SuppressWarnings("deprecation")
