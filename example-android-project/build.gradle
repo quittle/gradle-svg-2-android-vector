@@ -1,13 +1,15 @@
 buildscript {
     repositories {
         mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
         google()
     }
 
     final String pluginId = System.getenv('TEST_PLUGIN_ID_OVERRIDE') ?: 'svg-2-android-vector'
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.android.tools.build:gradle:8.13.0'
         classpath "com.quittle:${pluginId}:+"
     }
 }
@@ -17,17 +19,24 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
+    mavenCentral()
+    gradlePluginPortal()
     google()
-    jcenter()
 }
 
 apply plugin: 'com.quittle.svg-2-android-vector'
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 36
+    buildToolsVersion "36.1.0"
     namespace 'com.example'
 
+    defaultConfig {
+        minSdkVersion=21
+        targetSdkVersion=36
+    }
     sourceSets {
         main {
             final String altResDir = System.getenv 'ALTERNATIVE_RES_DIR'
@@ -35,6 +44,10 @@ android {
                 res.srcDir altResDir
             }
         }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 

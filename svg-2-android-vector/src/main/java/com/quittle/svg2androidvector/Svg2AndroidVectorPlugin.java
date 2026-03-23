@@ -10,6 +10,7 @@ import org.gradle.api.Task;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.util.PatternFilterable;
 
 import java.io.File;
@@ -45,6 +46,12 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
             SVG_FILE_EXTENSION);
     private static final String CONVERSION_TASK_NAME_FORMAT = "ConvertSvgToXml-%s";
 
+    /**
+     * Default constructor.
+     */
+    public Svg2AndroidVectorPlugin() {
+    }
+
     @Override
     public void apply(final Project project) {
         final Svg2AndroidVectorExtension extension = new Svg2AndroidVectorExtension();
@@ -75,14 +82,15 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
             return;
         }
         final TaskContainer taskContainer = project.getTasks();
-        final Task parentTask = taskContainer.create(CONVERSION_PARENT_TASK_NAME);
+        final TaskProvider<Task> parentTaskProvider = taskContainer.register(CONVERSION_PARENT_TASK_NAME);
         // An early Android task all the conversion tasks should be a dependency of
-        final Task preBuildTask = taskContainer.findByName(EARLY_ANDROID_TASK_NAME);
-        if (preBuildTask != null) {
-            preBuildTask.dependsOn(parentTask);
-        }
+        final TaskProvider<Task> preBuildTaskProvider = taskContainer.named(EARLY_ANDROID_TASK_NAME);
+
+        preBuildTaskProvider.configure( preBuildTask -> {
+            preBuildTask.dependsOn(parentTaskProvider);
+        });
         // The folder to put the converted files
-        final File generatedResourceDir = new File(project.getBuildDir(), BUILD_DIR_RESOURCE_NAME);
+        final File generatedResourceDir = new File(project.getLayout().getBuildDirectory().getAsFile().get(), BUILD_DIR_RESOURCE_NAME);
         for (final AndroidSourceSet sourceSet : androidExtension.getSourceSets()) {
             final String sourceSetName = sourceSet.getName(); // e.g. main, androidTest, debug, etc.
             final AndroidSourceDirectorySet sourceDirectorySet = sourceSet.getRes();
@@ -93,14 +101,19 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                         // resource
                         // directory specifically for this source set
                         final File newResourceDir = new File(generatedResourceDir, sourceSetName);
-                        taskContainer.create(buildTaskName(svgFile), Svg2AndroidVectorTask.class, task -> {
-                            task.svg = svgFile;
-                            task.xml = Paths.get(
-                                    newResourceDir.getAbsolutePath(),
-                                    ANDROID_RESOURCES_DIR_NAME_DRAWABLE,
-                                    svgFile.getName().replace(SVG_FILE_EXTENSION, XML_FILE_EXTENSION)).toFile();
-                            task.failOnWarning = extension.getFailOnWarning();
-                            parentTask.dependsOn(task);
+
+                        final TaskProvider<Svg2AndroidVectorTask> taskProvider = taskContainer.register(buildTaskName(svgFile),
+                            Svg2AndroidVectorTask.class, task -> {
+                                task.svg = svgFile;
+                                task.xml = Paths.get(
+                                        newResourceDir.getAbsolutePath(),
+                                        ANDROID_RESOURCES_DIR_NAME_DRAWABLE,
+                                        svgFile.getName().replace(SVG_FILE_EXTENSION, XML_FILE_EXTENSION)).toFile();
+                                task.failOnWarning = extension.getFailOnWarning();
+                            }
+                        );
+                        parentTaskProvider.configure( parentTask -> {
+                            parentTask.dependsOn(taskProvider);
                         });
 
                         // Add the new, generated resource directory for the source set
