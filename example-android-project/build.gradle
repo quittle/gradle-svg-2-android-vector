@@ -2,7 +2,6 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
-        gradlePluginPortal()
         google()
     }
 
@@ -21,7 +20,6 @@ plugins {
 repositories {
     mavenLocal()
     mavenCentral()
-    gradlePluginPortal()
     google()
 }
 
@@ -34,8 +32,8 @@ android {
     namespace 'com.example'
 
     defaultConfig {
-        minSdkVersion=21
-        targetSdkVersion=36
+        minSdkVersion = 21
+        targetSdkVersion = 36
     }
     sourceSets {
         main {
