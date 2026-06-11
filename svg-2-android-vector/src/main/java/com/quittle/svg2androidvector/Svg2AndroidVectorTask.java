@@ -48,7 +48,6 @@ public class Svg2AndroidVectorTask extends DefaultTask {
      * @return The Android vector xml file to convert to.
      */
     @OutputFile
-    @PathSensitive(PathSensitivity.ABSOLUTE)
     public File getXml() {
         return xml;
     }
@@ -64,9 +63,7 @@ public class Svg2AndroidVectorTask extends DefaultTask {
         return failOnWarning;
     }
 
-    @PathSensitive(PathSensitivity.ABSOLUTE)
     File svg = null;
-    @PathSensitive(PathSensitivity.ABSOLUTE)
     File xml = null;
     boolean failOnWarning = true;
 
