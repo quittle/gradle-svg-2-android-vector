@@ -8,7 +8,7 @@ buildscript {
     final String pluginId = System.getenv('TEST_PLUGIN_ID_OVERRIDE') ?: 'svg-2-android-vector'
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.13.0'
+        classpath 'com.android.tools.build:gradle:9.2.1'
         classpath "com.quittle:${pluginId}:+"
     }
 }
@@ -27,13 +27,12 @@ apply plugin: 'com.quittle.svg-2-android-vector'
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 36
-    buildToolsVersion "36.1.0"
-    namespace 'com.example'
+    compileSdk = 37
+    namespace = 'com.example'
 
     defaultConfig {
-        minSdkVersion = 21
-        targetSdkVersion = 36
+        minSdk = 21
+        targetSdk = 37
     }
     sourceSets {
         main {
