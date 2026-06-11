@@ -65,9 +65,9 @@ public class Svg2AndroidVectorTask extends DefaultTask {
     }
 
     @PathSensitive(PathSensitivity.ABSOLUTE)
-    File svg;
+    File svg = null;
     @PathSensitive(PathSensitivity.ABSOLUTE)
-    File xml;
+    File xml = null;
     boolean failOnWarning = true;
 
     /**
@@ -110,9 +110,11 @@ public class Svg2AndroidVectorTask extends DefaultTask {
         }
     }
 
-    private static void mkdirs(final File directory) {
+    private void mkdirs(final File directory) throws TaskExecutionException {
         if (!directory.mkdirs() && !directory.isDirectory()) {
-            throw new RuntimeException("Unable to make output directory: " + directory.getAbsolutePath());
+            throw new TaskExecutionException(this,
+                new RuntimeException(
+                    "Unable to make output directory: " + directory.getAbsolutePath()));
         }
     }
 
