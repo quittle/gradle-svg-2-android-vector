@@ -13,13 +13,18 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputFile;
+import org.gradle.api.tasks.PathSensitive;
+import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskExecutionException;
+
+import org.gradle.work.DisableCachingByDefault; 
 
 /**
  * Converts an SVG file to an Android vector drawable.
  */
 @SuppressWarnings("PMD.BeanMembersShouldSerialize")
+@DisableCachingByDefault(because = "This task transforms SVG to Android Vector which is fast enough")
 public class Svg2AndroidVectorTask extends DefaultTask {
     /**
      * Default constructor.
@@ -33,6 +38,7 @@ public class Svg2AndroidVectorTask extends DefaultTask {
      * @return The SVG file to convert from
      */
     @InputFile
+    @PathSensitive(PathSensitivity.ABSOLUTE)
     public File getSvg() {
         return svg;
     }
@@ -57,8 +63,8 @@ public class Svg2AndroidVectorTask extends DefaultTask {
         return failOnWarning;
     }
 
-    File svg;
-    File xml;
+    File svg = null;
+    File xml = null;
     boolean failOnWarning = true;
 
     /**
@@ -101,9 +107,11 @@ public class Svg2AndroidVectorTask extends DefaultTask {
         }
     }
 
-    private static void mkdirs(final File directory) {
+    private void mkdirs(final File directory) throws TaskExecutionException {
         if (!directory.mkdirs() && !directory.isDirectory()) {
-            throw new RuntimeException("Unable to make output directory: " + directory.getAbsolutePath());
+            throw new TaskExecutionException(this,
+                new RuntimeException(
+                    "Unable to make output directory: " + directory.getAbsolutePath()));
         }
     }
 

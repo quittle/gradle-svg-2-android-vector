@@ -11,8 +11,8 @@ buildscript {
 import org.eclipse.jgit.api.Git
 
 plugins {
-    id 'com.github.spotbugs' version '5.0.14'
-    id 'com.gradle.plugin-publish' version '1.2.0'
+    id 'com.github.spotbugs' version '6.5.6'
+    id 'com.gradle.plugin-publish' version '2.1.1'
     id 'java-gradle-plugin'
     id 'maven-publish'
     id 'pmd'
@@ -60,12 +60,12 @@ compileJava {
 }
 
 dependencies {
-    annotationProcessor group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.7.3'
-    compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.7.3'
+    annotationProcessor group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.9.8'
+    compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.9.8'
 
     implementation gradleApi()
     implementation 'com.android.tools.build:gradle:9.2.1' // TODO: remove?
-    implementation 'com.android.tools:sdk-common:31.0.2'
+    implementation 'com.android.tools:sdk-common:32.2.1'
 }
 
 tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach {
