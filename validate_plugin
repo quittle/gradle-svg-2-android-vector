@@ -78,12 +78,18 @@ assert_file_does_not_exist "$VECTOR_RESOURCES_DIR"
 
 TEST_FILE_HASH='7c29d5922129a1cb5a267c01b45d5fd4973f3a632bdb0101895b2101964faa10'
 ANDROID_FILE_HASH='25d1c815ef09f97e140257dfaf69651fcc0aa65953438c587b7327e07e10191d'
+CHECKLISK_FILE_HASH='31abcda4ff834987401ff5787000ecdff263ac5ca74a7351956d461d541cc285'
+INTERNAL_FILE_HASH='0d0d4972ab4c4247752916d645d22128bf78f667ce3d63ceb709907e40b8e317'
+PROD_FILE_HASH='0d0d4972ab4c4247752916d645d22128bf78f667ce3d63ceb709907e40b8e317'
 
 # Default build
 ./gradlew -p example-android-project assemble
 assert_file_exists "$VECTOR_RESOURCES_DIR"
 assert_file_hash "${VECTOR_RESOURCES_DIR}/main/drawable/test.xml" "${TEST_FILE_HASH}"
 assert_file_hash "${VECTOR_RESOURCES_DIR}/androidTest/drawable/android.xml" "${ANDROID_FILE_HASH}"
+assert_file_hash "${VECTOR_RESOURCES_DIR}/main/drawable-en/checklist.xml" "${CHECKLISK_FILE_HASH}"
+assert_file_hash "${VECTOR_RESOURCES_DIR}/internal/drawable/take_a_bath.xml" "${INTERNAL_FILE_HASH}"
+assert_file_hash "${VECTOR_RESOURCES_DIR}/prod/drawable/take_a_bath.xml" "${PROD_FILE_HASH}"
 
 build_with_failure true ''
 
