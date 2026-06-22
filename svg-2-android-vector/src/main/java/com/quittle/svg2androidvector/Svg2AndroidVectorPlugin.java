@@ -1,8 +1,8 @@
 package com.quittle.svg2androidvector;
 
-import com.android.build.gradle.BaseExtension;
 import com.android.build.api.dsl.AndroidSourceDirectorySet;
 import com.android.build.api.dsl.AndroidSourceSet;
+import com.android.build.api.dsl.CommonExtension;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -71,7 +71,7 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
         final Logger logger = project.getLogger();
         final String displayName = project.getDisplayName();
         // The base Android extension, where all resources can be found.
-        final BaseExtension androidExtension = project.getExtensions().findByType(BaseExtension.class);
+        final CommonExtension androidExtension = project.getExtensions().findByType(CommonExtension.class);
         if (androidExtension == null) {
             // This might mean it was applied to a non-Android project, possibly just the
             // root project.
@@ -117,7 +117,7 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                         });
 
                         // Add the new, generated resource directory for the source set
-                        sourceDirectorySet.srcDir(newResourceDir);
+                        sourceDirectorySet.getDirectories().add(newResourceDir.getAbsolutePath());
                         // Remove the original resource from the resources. Two resources with the same
                         // name but
                         // different types may not share the same name.

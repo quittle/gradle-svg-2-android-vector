@@ -64,11 +64,11 @@ dependencies {
     compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.7.3'
 
     implementation gradleApi()
-    implementation 'com.android.tools.build:gradle:8.13.0' // TODO: remove?
+    implementation 'com.android.tools.build:gradle:9.2.1' // TODO: remove?
     implementation 'com.android.tools:sdk-common:31.0.2'
 }
 
-tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach {
     reports {
         xml.enabled = false
         html.enabled = true
