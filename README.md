@@ -20,6 +20,7 @@ plugins {
 
 ### Resouce layout
 Put your SVGs in the `raw` Android resource folder and consume them as if they were in the drawable. You *will not* be able to consume the original SVGs as their names would conflict.
+You can now put SVG in raw recource folder with qualifier suffix (for example "raw-en" or "raw-night"). Generated drawable folder with result xml will have the same qualifier suffix.
 
 ```java
 src
@@ -30,7 +31,9 @@ src
     │           └── project
     │               └── MyActivity.java // mView.setBackground(R.drawable.ic_foobar);
     └── res
-        └── raw
+        ├── raw
+        │   └── ic_foobar.svg
+        └── raw-night
             └── ic_foobar.svg
 ```
 
