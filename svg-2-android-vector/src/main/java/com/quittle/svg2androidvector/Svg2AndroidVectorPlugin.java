@@ -17,8 +17,8 @@ import java.io.File;
 import java.nio.file.Paths;
 
 /**
- * Entry point for the project. This plugin will replace {@code res/raw/*.svg}
- * files with {@code res/drawable/*.xml}
+ * Entry point for the project. This plugin will replace {@code res/raw&#42;/*.svg}
+ * files with {@code res/drawable&#42;/*.xml}
  * files in the Android Vector format. This allows you check-in the SVG sources
  * for Android vector drawables.
  */
@@ -42,9 +42,10 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
     private static final String BUILD_DIR_RESOURCE_NAME = "android-vector-resources";
     private static final String EARLY_ANDROID_TASK_NAME = "preBuild";
     // TODO: See if the drawable folder may be used instead of raw.
-    private static final String SVG_FILTER_PATTERN = String.format("%s/**/*%s", ANDROID_RESOURCES_DIR_NAME_RAW,
+    private static final String SVG_FILTER_PATTERN = String.format("%s*/**/*%s", ANDROID_RESOURCES_DIR_NAME_RAW,
             SVG_FILE_EXTENSION);
     private static final String CONVERSION_TASK_NAME_FORMAT = "ConvertSvgToXml-%s-%s";
+    private static final int SEARCH_RAW_DIR_DEPTH = 3;
 
     /**
      * Default constructor.
@@ -101,14 +102,16 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                         // resource
                         // directory specifically for this source set
                         final File newResourceDir = new File(generatedResourceDir, sourceSetName);
+                        final String suffix = getQualifierSuffix(svgFile);
+                        final String taskName = buildTaskName(sourceSetName + suffix, svgFile);
+                        final File xmlFile = Paths.get(newResourceDir.getAbsolutePath(),
+                            ANDROID_RESOURCES_DIR_NAME_DRAWABLE + suffix,
+                            svgFile.getName().replace(SVG_FILE_EXTENSION, XML_FILE_EXTENSION)).toFile();
 
-                        final TaskProvider<Svg2AndroidVectorTask> taskProvider = taskContainer.register(buildTaskName(sourceSetName, svgFile),
+                        final TaskProvider<Svg2AndroidVectorTask> taskProvider = taskContainer.register(taskName,
                             Svg2AndroidVectorTask.class, task -> {
                                 task.svg = svgFile;
-                                task.xml = Paths.get(
-                                        newResourceDir.getAbsolutePath(),
-                                        ANDROID_RESOURCES_DIR_NAME_DRAWABLE,
-                                        svgFile.getName().replace(SVG_FILE_EXTENSION, XML_FILE_EXTENSION)).toFile();
+                                task.xml = xmlFile;
                                 task.failOnWarning = extension.getFailOnWarning();
                             }
                         );
@@ -138,5 +141,29 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
     @SuppressWarnings("deprecation")
     private static PatternFilterable getSourceSetFilter(AndroidSourceDirectorySet sourceSet) {
         return ((com.android.build.gradle.api.AndroidSourceDirectorySet) sourceSet).getFilter();
+    }
+
+    /**
+     * Parses the file's parent directory and returns the qualifier suffix for raw directory.
+     * For example: for ".../res/raw-night/logo.svg" will return "-night"
+     *              for ".../res/raw/logo.svg" will return ""
+     */
+    private static String getQualifierSuffix(File svgFile) {
+        final String prefix = ANDROID_RESOURCES_DIR_NAME_RAW + "-";
+        File file = svgFile.getParentFile();
+
+        // We move up the folder tree until we find the one we need (for example, "raw-en" or "raw")
+        for (int i = 0; i < SEARCH_RAW_DIR_DEPTH && file != null; ++i) {
+            String name = file.getName();
+
+            // Check if a folder contains a hyphen (a sign of qualifiers such as language/region)
+            if (name.startsWith(prefix)) {
+                // Strip off the "raw" prefix and return the remaining part (e.g. "-en")
+                return name.substring(name.indexOf("-"));
+            }
+            file = file.getParentFile();
+        }
+        // If there is no hyphen (just the "raw" folder), there is no qualifier.
+        return "";
     }
 }
