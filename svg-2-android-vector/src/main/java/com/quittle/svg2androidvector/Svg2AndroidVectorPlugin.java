@@ -42,10 +42,9 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
     private static final String BUILD_DIR_RESOURCE_NAME = "android-vector-resources";
     private static final String EARLY_ANDROID_TASK_NAME = "preBuild";
     // TODO: See if the drawable folder may be used instead of raw.
-    private static final String SVG_FILTER_PATTERN = String.format("%s*/**/*%s", ANDROID_RESOURCES_DIR_NAME_RAW,
+    private static final String SVG_FILTER_PATTERN = String.format("%s*/*%s", ANDROID_RESOURCES_DIR_NAME_RAW,
             SVG_FILE_EXTENSION);
     private static final String CONVERSION_TASK_NAME_FORMAT = "ConvertSvgToXml-%s-%s";
-    private static final int SEARCH_RAW_DIR_DEPTH = 3;
 
     /**
      * Default constructor.
@@ -149,19 +148,12 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
      *              for ".../res/raw/logo.svg" will return ""
      */
     private static String getQualifierSuffix(File svgFile) {
-        final String prefix = ANDROID_RESOURCES_DIR_NAME_RAW + "-";
-        File file = svgFile.getParentFile();
+        String name = svgFile.getParentFile().getName();
 
-        // We move up the folder tree until we find the one we need (for example, "raw-en" or "raw")
-        for (int i = 0; i < SEARCH_RAW_DIR_DEPTH && file != null; ++i) {
-            String name = file.getName();
-
-            // Check if a folder contains a hyphen (a sign of qualifiers such as language/region)
-            if (name.startsWith(prefix)) {
-                // Strip off the "raw" prefix and return the remaining part (e.g. "-en")
-                return name.substring(name.indexOf("-"));
-            }
-            file = file.getParentFile();
+        // Check if a folder contains a hyphen (a sign of qualifiers such as language/region)
+        if (name.startsWith(ANDROID_RESOURCES_DIR_NAME_RAW + "-")) {
+            // Strip off the "raw" prefix and return the remaining part (e.g. "-en")
+            return name.substring(name.indexOf("-"));
         }
         // If there is no hyphen (just the "raw" folder), there is no qualifier.
         return "";
