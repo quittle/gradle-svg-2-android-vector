@@ -5,7 +5,6 @@ import com.android.build.api.variant.SourceDirectories;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.file.ConfigurableFileTree;
 import org.gradle.api.file.Directory;
 import org.gradle.api.provider.Provider;
@@ -91,13 +90,6 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
         AndroidComponentsExtension<?, ?, ?> androidComponents =
                 project.getExtensions().getByType(AndroidComponentsExtension.class);
         final TaskContainer taskContainer = project.getTasks();
-        final TaskProvider<Task> parentTaskProvider = taskContainer.register(CONVERSION_PARENT_TASK_NAME);
-        // An early Android task all the conversion tasks should be a dependency of
-        final TaskProvider<Task> preBuildTaskProvider = taskContainer.named(EARLY_ANDROID_TASK_NAME);
-
-        preBuildTaskProvider.configure( preBuildTask ->
-            preBuildTask.dependsOn(parentTaskProvider)
-        );
 
         androidComponents.onVariants(androidComponents.selector().all(), variant -> {
             final SourceDirectories.Layered variantRes = variant.getSources().getRes();
@@ -142,10 +134,6 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                                             task.xml = new File(project.getLayout().getBuildDirectory().dir(drawableRelativeOutPath).get().toString(),
                                                 svgFile.getName().replace(SVG_FILE_EXTENSION, XML_FILE_EXTENSION));
                                         }
-                                );
-
-                                parentTaskProvider.configure( parentTask ->
-                                    parentTask.dependsOn(taskProvider)
                                 );
 
                                 variantRes.addGeneratedSourceDirectory(
