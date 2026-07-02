@@ -101,10 +101,7 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
 
             // 2. Explicitly iterate over nested test components (androidTest)
             for (Component nestedComponent : variant.getNestedComponents()) {
-                // We check that this is indeed an instrumented testing component
-                if (nestedComponent.getName().endsWith("AndroidTest")) {
-                    registerSvgTaskForComponent(project, extension, nestedComponent);
-                }
+                registerSvgTaskForComponent(project, extension, nestedComponent);
             }
         });
     }
@@ -129,7 +126,6 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                 File resDir = directory.getAsFile();
 
                 if (resDir.exists()) {
-
                     ConfigurableFileTree svgTree = project.fileTree(resDir);
                     svgTree.include(SVG_FILTER_PATTERN);
 
