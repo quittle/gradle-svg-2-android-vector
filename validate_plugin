@@ -81,6 +81,7 @@ ANDROID_FILE_HASH='25d1c815ef09f97e140257dfaf69651fcc0aa65953438c587b7327e07e101
 CHECKLISK_FILE_HASH='e568100119e06ff907d2bbdabd3d07c0744ee911c2f2191d13abaf5498b77f10'
 INTERNAL_FILE_HASH='5ae805f046c1c0288860f9c822fbc2e9cc51844238d39b1bfaf71368450d8513'
 PROD_FILE_HASH='5ae805f046c1c0288860f9c822fbc2e9cc51844238d39b1bfaf71368450d8513'
+SPECIAL_TEST_FILE_HASH='17aa1830477a30844ed5aa0935b8549ee91f8ba470ddb1bb5021faba7ecf5cce'
 
 # Default build
 ./gradlew -p example-android-project assemble assembleAndroidTest
@@ -90,6 +91,7 @@ assert_file_hash "${VECTOR_RESOURCES_DIR}/internalNormalDebugAndroidTest/drawabl
 assert_file_hash "${VECTOR_RESOURCES_DIR}/prodNormalRelease/drawable-en/checklist.xml" "${CHECKLISK_FILE_HASH}"
 assert_file_hash "${VECTOR_RESOURCES_DIR}/internalNormalRelease/drawable/take_a_bath.xml" "${INTERNAL_FILE_HASH}"
 assert_file_hash "${VECTOR_RESOURCES_DIR}/prodNormalRelease/drawable/take_a_bath.xml" "${PROD_FILE_HASH}"
+assert_file_hash "${VECTOR_RESOURCES_DIR}/internalSpecialRelease/drawable/test.xml" "${SPECIAL_TEST_FILE_HASH}"
 
 build_with_failure true ''
 
