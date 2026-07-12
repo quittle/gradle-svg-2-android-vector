@@ -37,6 +37,11 @@ src
             └── ic_foobar.svg
 ```
 
+If different resource sets from flavours and main contain different versions of the same file, plugin uses the following priority order when deciding which file to use.
+Resource sets on the left override the files of resource sets to the right:
+
+Build variant > Build type > Product flavor > Main source set > Library dependencies
+
 ## Building
 ```sh
 # Build the plugin and run static analysis tools

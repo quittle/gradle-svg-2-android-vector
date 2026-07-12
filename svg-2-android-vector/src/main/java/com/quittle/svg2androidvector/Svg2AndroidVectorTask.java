@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
+import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
@@ -25,7 +27,7 @@ import org.gradle.work.DisableCachingByDefault;
  */
 @SuppressWarnings("PMD.BeanMembersShouldSerialize")
 @DisableCachingByDefault(because = "This task transforms SVG to Android Vector which is fast enough")
-public class Svg2AndroidVectorTask extends DefaultTask {
+public abstract class Svg2AndroidVectorTask extends DefaultTask {
     /**
      * Default constructor.
      */
@@ -62,6 +64,13 @@ public class Svg2AndroidVectorTask extends DefaultTask {
     public boolean getFailOnWarning() {
         return failOnWarning;
     }
+
+    /**
+     * Output directory for lazy linking in addGeneratedSourceDirectory().
+     * @return generated directory for task converting svg to xml.
+     */
+    @OutputDirectory
+    public abstract DirectoryProperty getOutputDirectory();
 
     File svg = null;
     File xml = null;

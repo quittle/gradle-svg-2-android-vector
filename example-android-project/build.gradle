@@ -33,6 +33,8 @@ android {
     defaultConfig {
         minSdk = 21
         targetSdk = 37
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     sourceSets {
         main {
@@ -77,4 +79,9 @@ svg2androidVector {
 
 setupAndroidSdk {
     licensesDirectory = file("licenses")
+}
+
+dependencies {
+    androidTestImplementation 'androidx.test:runner:1.7.0'
+    androidTestImplementation 'androidx.test:rules:1.7.0'
 }
