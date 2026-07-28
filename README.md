@@ -42,6 +42,31 @@ Resource sets on the left override the files of resource sets to the right:
 
 Build variant > Build type > Product flavor > Main source set > Library dependencies
 
+### Alternative resouce layout
+Android build will put original svg files to apk if you use "res/raw" directory. To prevent this you can use svgSourceDir parameter to set alternative resource directory for svg files. Put raw directories with qualifiers inside it.
+
+```groovy
+svg2androidVector {
+    svgSourceDir = svgres
+}
+```
+
+```java
+src
+├── main
+│   └── svgres
+│       ├── raw
+│       │   └── ic_foobar.svg
+│       └── raw-night
+│           └── ic_foobar.svg
+└── prod
+    └── svgres
+        ├── raw
+        │   └── ic_foobar.svg
+        └── raw-en
+            └── ic_foobar.svg
+```
+
 ## Building
 ```sh
 # Build the plugin and run static analysis tools
