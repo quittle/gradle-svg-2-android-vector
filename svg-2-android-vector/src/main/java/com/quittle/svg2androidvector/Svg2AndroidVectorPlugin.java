@@ -123,19 +123,19 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
         for (Collection<Directory> setOfDirs : resourceCollections) {
             for (Directory directory : setOfDirs) {
                 File resDir = directory.getAsFile();
-                final String svgSourceDir = extension.getSvgSourceDir();
+                final String svgResDirName = extension.getSvgResDirName();
 
-                if (svgSourceDir != null)
+                if (svgResDirName != null)
                 {
-                    if (svgSourceDir.isEmpty())
+                    if (svgResDirName.isEmpty())
                     {
                         throw new GradleException(
                             "Plugin: " + Svg2AndroidVectorPlugin.class.getSimpleName() + "\n" +
                             "Error configuring component: " + component.getName() + "\n" +
-                            "Reason: 'svgSourceDir' cannot be empty."
+                            "Reason: 'svgResDirName' cannot be empty."
                         );
                     }
-                    resDir = new File(resDir.getParentFile(), svgSourceDir);
+                    resDir = new File(resDir.getParentFile(), svgResDirName);
                 }
                 if (resDir.exists()) {
                     ConfigurableFileTree svgTree = project.fileTree(resDir);

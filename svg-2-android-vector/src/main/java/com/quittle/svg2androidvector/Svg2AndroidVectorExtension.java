@@ -6,7 +6,7 @@ package com.quittle.svg2androidvector;
 @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public class Svg2AndroidVectorExtension {
     private boolean failOnWarning = true;
-    private String svgSourceDir = null;
+    private String svgResDirName = null;
 
     /**
      * Default constructor.
@@ -41,29 +41,29 @@ public class Svg2AndroidVectorExtension {
     }
 
     /**
-     * Gets svgSourceDir parameter for svg alternative resource directory where plugin will search for
+     * Gets svgResDirName parameter for svg alternative resource directory where plugin will search for
      *       raw directories with qualifiers.
      * @return directory for svg resources
      */
-    public String getSvgSourceDir() {
-        return svgSourceDir;
+    public String getSvgResDirName() {
+        return svgResDirName;
     }
 
     /**
-     * Sets svgSourceDir parameter for svg alternative resource directory where plugin will search for
+     * Sets svgResDirName parameter for svg alternative resource directory where plugin will search for
      *       raw directories with qualifiers.
-     * @param svgSourceDir directory for svg resources.
+     * @param svgResDirName directory for svg resources.
      */
-    public void setSvgSourceDir(final String svgSourceDir) {
-        this.svgSourceDir = svgSourceDir;
+    public void setSvgResDirName(final String svgResDirName) {
+        this.svgResDirName = svgResDirName;
     }
 
     /**
-     * Sets svgSourceDir parameter for svg alternative resource directory where plugin will search for
+     * Sets svgResDirName parameter for svg alternative resource directory where plugin will search for
      *       raw directories with qualifiers.
-     * @param svgSourceDir directory for svg resources.
+     * @param svgResDirName directory for svg resources.
      */
-    public void svgSourceDir(final String svgSourceDir) {
-        this.svgSourceDir = svgSourceDir;
+    public void svgResDirName(final String svgResDirName) {
+        this.svgResDirName = svgResDirName;
     }
 }
