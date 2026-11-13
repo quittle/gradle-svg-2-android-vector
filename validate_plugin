@@ -105,13 +105,12 @@ assert_file_hash "${VECTOR_RESOURCES_DIR}/internalNormalRelease/drawable/take_a_
 assert_file_hash "${VECTOR_RESOURCES_DIR}/prodNormalRelease/drawable/take_a_bath.xml" "${PROD_FILE_HASH}"
 assert_file_hash "${VECTOR_RESOURCES_DIR}/internalSpecialRelease/drawable/test.xml" "${SPECIAL_TEST_FILE_HASH}"
 
-# Build with svg source dir
-@echo ============================
+# Build with non existing svg source dir
 rm -rf 'example-android-project/build'
 assert_file_does_not_exist "$VECTOR_RESOURCES_DIR"
 build_with_svg_res_dir_name_with_failure svgresinvalid
 
-@echo ============================
+# Build with svg source dir
 rm -rf 'example-android-project/build'
 assert_file_does_not_exist "$VECTOR_RESOURCES_DIR"
 TEST_SVG_RES_DIR_NAME='svgres' \
