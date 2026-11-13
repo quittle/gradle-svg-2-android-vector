@@ -119,24 +119,17 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
         final Provider<List<Collection<Directory>>> resProvider = variantRes.getAll();
         final List<Collection<Directory>> resourceCollections = resProvider.get();
         final String componentName = component.getName();
+        final String svgResDirName = extension.getSvgResDirName();
+        final boolean useAlternateSvgResDir = svgResDirName != null && !svgResDirName.isEmpty();
+        boolean svgResDirNameExists = false;
 
         for (Collection<Directory> setOfDirs : resourceCollections) {
             for (Directory directory : setOfDirs) {
                 File resDir = directory.getAsFile();
-                final String svgResDirName = extension.getSvgResDirName();
 
-                if (svgResDirName != null)
-                {
-                    if (svgResDirName.isEmpty())
-                    {
-                        throw new GradleException(
-                            "Plugin: " + Svg2AndroidVectorPlugin.class.getSimpleName() + "\n" +
-                            "Error configuring component: " + component.getName() + "\n" +
-                            "Reason: 'svgResDirName' cannot be empty."
-                        );
-                    }
+                if (useAlternateSvgResDir)
                     resDir = new File(resDir.getParentFile(), svgResDirName);
-                }
+
                 if (resDir.exists()) {
                     ConfigurableFileTree svgTree = project.fileTree(resDir);
                     svgTree.include(SVG_FILTER_PATTERN);
@@ -178,8 +171,18 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                             );
                         }
                     });
+                    if (useAlternateSvgResDir)
+                        svgResDirNameExists = true;
                 }
             }
+        }
+        if (useAlternateSvgResDir && !svgResDirNameExists) {
+            throw new GradleException(
+                "Plugin: " + Svg2AndroidVectorPlugin.class.getSimpleName() + "\n" +
+                "Error configuring component: " + component.getName() + "\n" +
+                "Reason: The directory '" + svgResDirName + "' specified by the value of the 'svgResDirName' parameter was not found in the application's resource sets." + "\n" +
+                "Please verify that the value is correct, or create a directory with that name within the resources."
+            );
         }
     }
 }

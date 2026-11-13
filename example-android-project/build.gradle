@@ -75,7 +75,7 @@ svg2androidVector {
         failOnWarning false
         failOnWarning = false
     }
-    svgResDirName = System.getenv('TEST_SVG_SOURCE_DIR')
+    svgResDirName = System.getenv('TEST_SVG_RES_DIR_NAME')
 }
 
 setupAndroidSdk {

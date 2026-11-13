@@ -72,6 +72,17 @@ build_with_failure() {
             echo 'Build failure expected'
 }
 
+# Builds the example android project
+# param 1 - The value for the TEST_SVG_RES_DIR_NAME environment variable
+build_with_svg_res_dir_name_with_failure() {
+    local testSvgResDirName="$1"
+
+    TEST_SVG_RES_DIR_NAME=${testSvgResDirName} \
+            ./gradlew -p example-android-project assemble && \
+            echo 'Build should not have succeeded' && exit 1 || \
+            echo 'Build failure expected'
+}
+
 # Clean up possibly existing files to ensure a fresh start
 rm -rf 'example-android-project/build'
 assert_file_does_not_exist "$VECTOR_RESOURCES_DIR"
@@ -95,8 +106,15 @@ assert_file_hash "${VECTOR_RESOURCES_DIR}/prodNormalRelease/drawable/take_a_bath
 assert_file_hash "${VECTOR_RESOURCES_DIR}/internalSpecialRelease/drawable/test.xml" "${SPECIAL_TEST_FILE_HASH}"
 
 # Build with svg source dir
+@echo ============================
 rm -rf 'example-android-project/build'
-TEST_SVG_SOURCE_DIR='svgres' \
+assert_file_does_not_exist "$VECTOR_RESOURCES_DIR"
+build_with_svg_res_dir_name_with_failure svgresinvalid
+
+@echo ============================
+rm -rf 'example-android-project/build'
+assert_file_does_not_exist "$VECTOR_RESOURCES_DIR"
+TEST_SVG_RES_DIR_NAME='svgres' \
     ./gradlew -p example-android-project assemble assembleAndroidTest
 assert_file_exists "$VECTOR_RESOURCES_DIR"
 assert_file_hash "${VECTOR_RESOURCES_DIR}/internalNormalRelease/drawable/test.xml" "${TEST_FILE_HASH}"
