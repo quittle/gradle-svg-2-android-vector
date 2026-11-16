@@ -6,6 +6,7 @@ package com.quittle.svg2androidvector;
 @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public class Svg2AndroidVectorExtension {
     private boolean failOnWarning = true;
+    private String svgResDirName = null;
 
     /**
      * Default constructor.
@@ -37,5 +38,32 @@ public class Svg2AndroidVectorExtension {
      */
     public void failOnWarning(final boolean failOnWarning) {
         this.failOnWarning = failOnWarning;
+    }
+
+    /**
+     * Gets svgResDirName parameter for svg alternative resource directory where plugin will search for
+     *       raw directories with qualifiers.
+     * @return directory for svg resources
+     */
+    public String getSvgResDirName() {
+        return svgResDirName;
+    }
+
+    /**
+     * Sets svgResDirName parameter for svg alternative resource directory where plugin will search for
+     *       raw directories with qualifiers.
+     * @param svgResDirName directory for svg resources.
+     */
+    public void setSvgResDirName(final String svgResDirName) {
+        this.svgResDirName = svgResDirName;
+    }
+
+    /**
+     * Sets svgResDirName parameter for svg alternative resource directory where plugin will search for
+     *       raw directories with qualifiers.
+     * @param svgResDirName directory for svg resources.
+     */
+    public void svgResDirName(final String svgResDirName) {
+        this.svgResDirName = svgResDirName;
     }
 }
