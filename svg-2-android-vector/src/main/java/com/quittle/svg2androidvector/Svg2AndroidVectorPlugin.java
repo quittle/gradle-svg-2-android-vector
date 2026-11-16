@@ -6,6 +6,7 @@ import com.android.build.api.variant.SourceDirectories;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.GradleException;
 import org.gradle.api.file.ConfigurableFileTree;
 import org.gradle.api.file.Directory;
 import org.gradle.api.provider.Provider;
@@ -96,32 +97,49 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                 project.getExtensions().getByType(AndroidComponentsExtension.class);
 
         androidComponents.onVariants(androidComponents.selector().all(), variant -> {
+            final String svgResDirName = extension.getSvgResDirName();
+            final boolean useAlternateSvgResDir = svgResDirName != null && !svgResDirName.isEmpty();
+            boolean svgResDirNameExists = false;
+
             // 1. Processing the resources of the main application
-            registerSvgTaskForComponent(project, extension, variant);
+            svgResDirNameExists |= registerSvgTaskForComponent(project, extension, variant);
 
             // 2. Explicitly iterate over nested test components (androidTest)
             for (Component nestedComponent : variant.getNestedComponents()) {
-                registerSvgTaskForComponent(project, extension, nestedComponent);
+                svgResDirNameExists |= registerSvgTaskForComponent(project, extension, nestedComponent);
+            }
+            if (useAlternateSvgResDir && !svgResDirNameExists) {
+                throw new GradleException(
+                    "Plugin: " + Svg2AndroidVectorPlugin.class.getSimpleName() + "\n" +
+                    "Error: The directory '" + svgResDirName + "' specified by the value of the 'svgResDirName' parameter was not found in the application's resource sets." + "\n" +
+                    "Please verify that the value is correct, or create a directory with that name within the resources."
+                );
             }
         });
     }
 
-    private static void registerSvgTaskForComponent(final Project project,
-                                                    final Svg2AndroidVectorExtension extension,
-                                                    final Component component) {
+    private static boolean registerSvgTaskForComponent(final Project project,
+                                                       final Svg2AndroidVectorExtension extension,
+                                                       final Component component) {
         final SourceDirectories.Layered variantRes = component.getSources().getRes();
 
         if (variantRes == null) {
-            return;
+            return false;
         }
         final TaskContainer taskContainer = project.getTasks();
         final Provider<List<Collection<Directory>>> resProvider = variantRes.getAll();
         final List<Collection<Directory>> resourceCollections = resProvider.get();
         final String componentName = component.getName();
+        final String svgResDirName = extension.getSvgResDirName();
+        final boolean useAlternateSvgResDir = svgResDirName != null && !svgResDirName.isEmpty();
+        boolean svgResDirNameExists = false;
 
         for (Collection<Directory> setOfDirs : resourceCollections) {
             for (Directory directory : setOfDirs) {
                 File resDir = directory.getAsFile();
+
+                if (useAlternateSvgResDir)
+                    resDir = new File(resDir.getParentFile(), svgResDirName);
 
                 if (resDir.exists()) {
                     ConfigurableFileTree svgTree = project.fileTree(resDir);
@@ -164,8 +182,11 @@ public class Svg2AndroidVectorPlugin implements Plugin<Project> {
                             );
                         }
                     });
+                    if (useAlternateSvgResDir)
+                        svgResDirNameExists = true;
                 }
             }
         }
+        return svgResDirNameExists;
     }
 }
