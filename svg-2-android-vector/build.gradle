@@ -40,7 +40,7 @@ gradlePlugin {
 
             displayName = 'Automated SVG to Android Vector converter'
             description = 'Automatically converts SVGs to Android Vector files as part of the build.'
-            tags.set(['android', 'android vector', 'svg', 'android resources'])
+            tags.set(['android', 'android-vector', 'svg', 'android-resources'])
             website = 'https://github.com/quittle/gradle-svg-2-android-vector'
             vcsUrl = 'https://github.com/quittle/gradle-svg-2-android-vector'
         }
